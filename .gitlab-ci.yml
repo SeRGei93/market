@@ -1,0 +1,51 @@
+stages:
+  - test
+  - pull
+  - build
+
+test:
+  stage: test
+  script:
+    - cd ./src
+    - composer install
+    - php ./vendor/bin/phpcs
+    - cp .env.testing.example .env.testing
+    - sed -i "s/REPLACE_DB_HOST/'$DB_HOST'/" .env.testing
+    - sed -i "s/REPLACE_TEST_DB_DATABASE/'$TEST_DB_DATABASE'/" .env.testing
+    - sed -i "s/REPLACE_TEST_DB_PASSWORD/'$TEST_DB_PASSWORD'/" .env.testing
+    - sed -i "s/REPLACE_TEST_DB_USERNAME/'$TEST_DB_USERNAME'/" .env.testing
+    - php artisan test
+  tags:
+    - dev
+    - prod
+
+pull:
+  stage: pull
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /var/www/html
+    - git checkout -- .
+    - git clean -fd
+    - git pull
+    - git status
+  tags:
+    - dev
+    - prod
+
+build:
+  stage: build
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cd /var/www/html/src &&
+    - composer install --optimize-autoloader --no-dev &&
+    - php artisan optimize:clear &&
+    - php artisan config:cache &&
+    - php artisan event:cache &&
+    - php artisan route:cache &&
+    - php artisan view:cache &&
+    - php artisan migrate
+  tags:
+    - dev
+    - prod
