@@ -1,10 +1,10 @@
 <?php
 
+use Domain\User\Model\User;
 use MoonShine\Exceptions\MoonShineNotFoundException;
 use MoonShine\Forms\LoginForm;
 use MoonShine\Http\Middleware\Authenticate;
 use MoonShine\Http\Middleware\SecurityHeadersMiddleware;
-use MoonShine\Models\MoonshineUser;
 use App\MoonShine\MoonShineLayout;
 use MoonShine\Pages\ProfilePage;
 
@@ -85,7 +85,7 @@ return [
         'providers' => [
             'moonshine' => [
                 'driver' => 'eloquent',
-                'model' => MoonshineUser::class,
+                'model' => User::class,
             ],
         ],
         'pipelines' => [],

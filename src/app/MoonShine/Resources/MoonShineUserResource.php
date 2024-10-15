@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use Domain\User\Model\User;
 use Illuminate\Validation\Rule;
 use MoonShine\Attributes\Icon;
 use MoonShine\Decorations\Block;
@@ -18,20 +19,16 @@ use MoonShine\Fields\Password;
 use MoonShine\Fields\PasswordRepeat;
 use MoonShine\Fields\Relationships\BelongsTo;
 use MoonShine\Fields\Text;
-use MoonShine\Models\MoonshineUser;
 use MoonShine\Resources\ModelResource;
 use MoonShine\Models\MoonshineUserRole;
 
 #[Icon('heroicons.outline.users')]
 class MoonShineUserResource extends ModelResource
 {
-    public string $model = MoonshineUser::class;
+    public string $model = User::class;
 
     public string $column = 'name';
-
     protected bool $columnSelection = true;
-
-    public array $with = ['moonshineUserRole'];
 
     public function title(): string
     {
@@ -47,13 +44,6 @@ class MoonShineUserResource extends ModelResource
                         ID::make()
                             ->sortable()
                             ->showOnExport(),
-
-                        BelongsTo::make(
-                            __('moonshine::ui.resource.role'),
-                            'moonshineUserRole',
-                            static fn (MoonshineUserRole $model) => $model->name,
-                            new MoonShineUserRoleResource(),
-                        )->badge('purple'),
 
                         Text::make(__('moonshine::ui.resource.name'), 'name')
                             ->required()
@@ -105,7 +95,6 @@ class MoonShineUserResource extends ModelResource
     {
         return [
             'name' => 'required',
-            'moonshine_user_role_id' => 'required',
             'email' => [
                 'sometimes',
                 'bail',

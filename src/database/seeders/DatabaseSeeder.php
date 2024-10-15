@@ -2,9 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Domain\User\Enum\Roles;
+use Domain\User\Enum\Gender;
+use Domain\User\Model\User;
+use Domain\User\Model\UserRole;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +17,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $clientRole = UserRole::where('slug', Roles::client->value)->first();
+        $adminRole = UserRole::where('slug', Roles::admin->value)->first();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // создаем пользователя админа
+        User::factory(1)
+            ->create([
+                'email' => 'admin@404team.by',
+                'password' => Hash::make('12345678'),
+                'name' => 'Admin',
+                'surname' => 'Administrator',
+                'gender' => Gender::MALE->value,
+            ])
+            ->each(function (User $user) use ($adminRole) {
+                $user->roles()->attach($adminRole->id);
+            });
+
+        User::factory(10)
+            ->create()
+            ->each(function (User $user) use ($clientRole) {
+                $user->roles()->attach($clientRole->id);
+            });
     }
 }

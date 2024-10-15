@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
+use Domain\User\Model\UserRole;
 use MoonShine\Attributes\Icon;
 use MoonShine\Decorations\Block;
 use MoonShine\Fields\ID;
 use MoonShine\Fields\Text;
-use MoonShine\Models\MoonshineUserRole;
 use MoonShine\Resources\ModelResource;
 
 #[Icon('heroicons.outline.bookmark')]
 class MoonShineUserRoleResource extends ModelResource
 {
-    public string $model = MoonshineUserRole::class;
+    public string $model = UserRole::class;
 
     public string $column = 'name';
 
@@ -37,6 +37,9 @@ class MoonShineUserRoleResource extends ModelResource
                 Text::make(__('moonshine::ui.resource.role_name'), 'name')
                     ->required()
                     ->showOnExport(),
+                Text::make(__('moonshine::ui.resource.role_slug'), 'slug')
+                    ->required()
+                    ->showOnExport(),
             ]),
         ];
     }
@@ -47,7 +50,8 @@ class MoonShineUserRoleResource extends ModelResource
     public function rules($item): array
     {
         return [
-            'name' => 'required|min:5',
+            'name' => 'required|min:5|max:50',
+            'slug' => 'required|min:5|max:50',
         ];
     }
 
@@ -56,6 +60,7 @@ class MoonShineUserRoleResource extends ModelResource
         return [
             'id',
             'name',
+            'slug',
         ];
     }
 }
