@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use MoonShine\MoonShineAuth;
 use Symfony\Component\Console\Attribute\AsCommand;
+
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\password;

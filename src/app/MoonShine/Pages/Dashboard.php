@@ -28,7 +28,7 @@ class Dashboard extends Page
      * @return list<MoonShineComponent>
      */
     public function components(): array
-	{
-		return [];
-	}
+    {
+        return [];
+    }
 }
