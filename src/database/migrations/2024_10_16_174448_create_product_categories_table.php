@@ -25,6 +25,7 @@ return new class extends Migration
                 ->constrained('product_categories')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->integer('sort')->default(500);
             $table->timestamps();
         });
     }

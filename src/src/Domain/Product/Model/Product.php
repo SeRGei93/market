@@ -3,10 +3,12 @@
 namespace Domain\Product\Model;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Database\Factories\ProductFactory;
 use Domain\Brand\Model\Brand;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Support\Enum\Status;
 
@@ -22,7 +24,6 @@ class Product extends Model
         'slug',
         'image',
         'status',
-        'tags',
         'weight',
         'length',
         'height',
@@ -34,7 +35,6 @@ class Product extends Model
         'country',
         'importer',
     ];
-
 
     protected $casts = [
         'image' => 'array',
@@ -50,9 +50,10 @@ class Product extends Model
         ];
     }
 
-    public function category(): BelongsTo
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id');
+        return $this->belongsToMany(ProductCategory::class, 'product_categorable')
+            ->using(CategoryProductPivot::class);
     }
 
     public function brand(): BelongsTo
@@ -73,5 +74,10 @@ class Product extends Model
     public function values(): HasMany
     {
         return $this->hasMany(CategoryValue::class);
+    }
+
+    protected static function newFactory(): ProductFactory
+    {
+        return ProductFactory::new();
     }
 }

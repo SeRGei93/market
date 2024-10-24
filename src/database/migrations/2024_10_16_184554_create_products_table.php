@@ -1,5 +1,7 @@
 <?php
 
+use Domain\Product\Model\Product;
+use Domain\Product\Model\ProductCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,10 +23,10 @@ return new class extends Migration
             $table->text('description');
             $table->text('image');
 
-            $table->decimal('weight', 10, 2);
-            $table->decimal('length', 10, 1)->comment('cm unit');
-            $table->decimal('width', 10, 1)->comment('cm unit');
-            $table->decimal('height', 10, 1)->comment('cm unit');
+            $table->decimal('weight', 10, 2)->nullable();
+            $table->decimal('length', 10, 1)->nullable()->comment('cm unit');
+            $table->decimal('width', 10, 1)->nullable()->comment('cm unit');
+            $table->decimal('height', 10, 1)->nullable()->comment('cm unit');
             $table->decimal('price', 20, 3);
             $table->decimal('amount', 20, 3)->default(0);
 
@@ -36,12 +38,22 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('category_id')
-                ->constrained('product_categories')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
+            $table->integer('sort')->default(500);
             $table->timestamps();
+        });
+
+        Schema::create('product_categorable', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignIdFor(Product::class)
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+
+            $table->foreignIdFor(ProductCategory::class)
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
         });
     }
 

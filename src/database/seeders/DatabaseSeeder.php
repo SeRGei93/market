@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $clientRole = UserRole::where('slug', Roles::client->value)->first();
-        $adminRole = UserRole::where('slug', Roles::admin->value)->first();
+        $clientRole = UserRole::query()->where('slug', Roles::client->value)->first();
+        $adminRole = UserRole::query()->where('slug', Roles::admin->value)->first();
 
         // создаем пользователя админа
         User::factory(1)

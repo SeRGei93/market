@@ -3,6 +3,7 @@
 namespace Domain\Brand\Model;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Database\Factories\BrandFactory;
 use Domain\Product\Model\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,12 +21,13 @@ class Brand extends Model
         'slug',
         'status',
         'description',
+        'sort'
     ];
-
 
     protected $casts = [
         'image' => 'array',
         'status' => Status::class,
+        'sort' => 'int'
     ];
 
     public function sluggable(): array
@@ -40,5 +42,10 @@ class Brand extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    protected static function newFactory(): BrandFactory
+    {
+        return BrandFactory::new();
     }
 }

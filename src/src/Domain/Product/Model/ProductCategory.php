@@ -3,6 +3,7 @@
 namespace Domain\Product\Model;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Database\Factories\ProductCategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,12 +22,14 @@ class ProductCategory extends Model
         'image',
         'status',
         'show_in_menu',
-        'parent_id'
+        'parent_id',
+        'sort'
     ];
 
     protected $casts = [
         'image' => 'array',
         'status' => Status::class,
+        'sort' => 'int'
     ];
 
     public function sluggable(): array
@@ -56,5 +59,10 @@ class ProductCategory extends Model
     public function attributes(): HasMany
     {
         return $this->hasMany(CategoryAttribute::class);
+    }
+
+    protected static function newFactory(): ProductCategoryFactory
+    {
+        return ProductCategoryFactory::new();
     }
 }

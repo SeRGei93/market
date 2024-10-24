@@ -26,6 +26,7 @@ services:
 
   mysql:
     image: mariadb:10.6
+    container_name: mysql
     restart: unless-stopped
     tty: true
     ports:
@@ -41,6 +42,7 @@ services:
       - ./dockerfiles/volumes/mysql/dump:/docker-entrypoint-initdb.d
 
   php:
+    container_name: php
     build:
       context: ./dockerfiles
       dockerfile: php.dockerfile
@@ -107,21 +109,21 @@ services:
     entrypoint: [ 'php', '/var/www/html/artisan' ]
     networks:
       - laravel
-  horizon:
-    build:
-      context: ./dockerfiles
-      dockerfile: php.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    volumes:
-      - ./src:/var/www/html
-    depends_on:
-      - php
-      - redis
-    networks:
-      - laravel
-    command: [ "php", "/var/www/html/artisan", "horizon" ]
+#  horizon:
+#    build:
+#      context: ./dockerfiles
+#      dockerfile: php.dockerfile
+#      args:
+#        - UID=${UID:-1000}
+#        - GID=${GID:-1000}
+#    volumes:
+#      - ./src:/var/www/html
+#    depends_on:
+#      - php
+#      - redis
+#    networks:
+#      - laravel
+#    command: [ "php", "/var/www/html/artisan", "horizon" ]
 
   mailhog:
     image: mailhog/mailhog:latest

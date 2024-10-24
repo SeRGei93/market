@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('category_attributes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug');
             $table->enum('type', AttributeType::toArray())->default(AttributeType::STRING->value);
             $table->string('unit');
             $table->foreignId('category_id')
