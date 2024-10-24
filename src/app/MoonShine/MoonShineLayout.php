@@ -36,18 +36,7 @@ final class MoonShineLayout implements MoonShineLayoutContract
                 ]),
                 Content::make(),
                 Footer::make()
-                    ->copyright(fn(): string => sprintf(
-                        <<<'HTML'
-                            &copy; 2021-%d Made with ❤️ by
-                            <a href="https://cutcode.dev"
-                                class="font-semibold text-primary hover:text-secondary"
-                                target="_blank"
-                            >
-                                CutCode
-                            </a>
-                        HTML,
-                        now()->year
-                    ))
+                    ->copyright('')
                     ->menu([
                         'https://moonshine-laravel.com/docs' => 'Documentation',
                     ]),
