@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\MoonShine\Resources\BrandResource;
 use App\MoonShine\Resources\ProductCategoryResource;
+use App\MoonShine\Resources\ProductResource;
 use MoonShine\Providers\MoonShineApplicationServiceProvider;
 use MoonShine\Menu\MenuGroup;
 use MoonShine\Menu\MenuItem;
@@ -47,6 +48,10 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuItem::make(
                 static fn() => 'Categories',
                 new ProductCategoryResource()
+            ),
+            MenuItem::make(
+                static fn() => 'Product',
+                new ProductResource()
             ),
             MenuGroup::make(static fn() => __('moonshine::ui.resource.system'), [
                 MenuItem::make(

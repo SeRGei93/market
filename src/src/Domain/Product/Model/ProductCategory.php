@@ -7,6 +7,7 @@ use Database\Factories\ProductCategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Support\Enum\Status;
 
@@ -51,9 +52,10 @@ class ProductCategory extends Model
         return $this->hasMany($this, 'parent_id')->with('children');
     }
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->belongsToMany(Product::class, 'product_categorable', 'product_id')
+            ->using(CategoryProductPivot::class);
     }
 
     public function attributes(): HasMany

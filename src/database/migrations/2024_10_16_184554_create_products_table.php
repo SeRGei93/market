@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable();
             $table->text('preview');
             $table->text('description');
-            $table->text('image');
+            $table->text('image')->nullable();
+            $table->text('instructions')->nullable();
 
             $table->decimal('weight', 10, 2)->nullable();
             $table->decimal('length', 10, 1)->nullable()->comment('cm unit');

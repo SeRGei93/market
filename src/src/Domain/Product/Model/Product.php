@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Support\Enum\Status;
 
 class Product extends Model
@@ -56,19 +57,14 @@ class Product extends Model
             ->using(CategoryProductPivot::class);
     }
 
-    public function brand(): BelongsTo
+    public function brand(): HasOne
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->hasOne(Brand::class, 'id', 'brand_id');
     }
 
-    public function metas(): HasMany
+    public function meta(): HasOne
     {
-        return $this->hasMany(ProductMeta::class);
-    }
-
-    public function images(): HasMany
-    {
-        return $this->hasMany(Gallery::class);
+        return $this->hasOne(ProductMeta::class);
     }
 
     public function values(): HasMany

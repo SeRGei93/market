@@ -13,6 +13,8 @@ use MoonShine\Fields\Enum;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Number;
 use MoonShine\Fields\Relationships\BelongsTo;
+use MoonShine\Fields\Relationships\BelongsToMany;
+use MoonShine\Fields\Relationships\HasMany;
 use MoonShine\Fields\Slug;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\TinyMce;
@@ -48,9 +50,11 @@ class ProductCategoryResource extends ModelResource
                     ->disk('images'),
                 Text::make('Name', 'name'),
                 Slug::make('Slug', 'slug'),
-                Number::make('Sort', 'sort'),
+                Number::make('Sort', 'sort')
+                ->sortable(),
                 Enum::make('Status', 'status')
-                    ->attach(Status::class),
+                    ->attach(Status::class)
+                    ->sortable(),
                 Checkbox::make('Show in menu', 'show_in_menu'),
                 TinyMce::make('Description', 'description')
                     ->removePlugins('autoresize'),
@@ -61,6 +65,13 @@ class ProductCategoryResource extends ModelResource
                     fn($item) => $item->name . ' (' . $item->id . ')',
                     new ProductCategoryResource()
                 ),
+
+                HasMany::make(
+                    'Children',
+                    'children',
+                    resource: new ProductCategoryResource(),
+                )->hideOnIndex()
+                ->readonly(),
             ]),
         ];
     }

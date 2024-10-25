@@ -49,7 +49,8 @@ class BrandResource extends ModelResource
                 Number::make('Sort', 'sort')
                     ->sortable(),
                 Enum::make('Status', 'status')
-                    ->attach(Status::class),
+                    ->attach(Status::class)
+                    ->sortable(),
                 TinyMce::make('Description', 'description')
                     ->removePlugins('autoresize'),
             ]),
